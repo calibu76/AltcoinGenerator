@@ -14,8 +14,8 @@
 # CHAIN variable below
 
 # change the following variables to match your new coin
-COIN_NAME="MyCoin"
-COIN_UNIT="MYC"
+COIN_NAME="StarBase"
+COIN_UNIT="Stb"
 # 42 million coins at total (litecoin total supply is 84000000)
 TOTAL_SUPPLY=42000000
 MAINNET_PORT="54321"
@@ -44,9 +44,9 @@ LITECOIN_TEST_GENESIS_HASH=4966625a4b2851d9fdee139e56211a0d88575f59ed816ff5e6a63
 LITECOIN_REGTEST_GENESIS_HASH=530827f38f93b43ed12af0b3ad25a288dc02ed74d6d7857862df51fc56c416f9
 MINIMUM_CHAIN_WORK_MAIN=0x0000000000000000000000000000000000000000000000c1bfe2bbe614f41260
 MINIMUM_CHAIN_WORK_TEST=0x000000000000000000000000000000000000000000000000001df7b5aa1700ce
-COIN_NAME_LOWER=$(echo $COIN_NAME | tr '[:upper:]' '[:lower:]')
-COIN_NAME_UPPER=$(echo $COIN_NAME | tr '[:lower:]' '[:upper:]')
-COIN_UNIT_LOWER=$(echo $COIN_UNIT | tr '[:upper:]' '[:lower:]')
+COIN_NAME_LOWER=$(echo $StarBase | tr '[:upper:]' '[:lower:]')
+COIN_NAME_UPPER=$(echo $StarBase | tr '[:lower:]' '[:upper:]')
+COIN_UNIT_LOWER=$(echo $StarBase | tr '[:upper:]' '[:lower:]')
 DIRNAME=$(dirname $0)
 DOCKER_NETWORK="172.18.0"
 DOCKER_IMAGE_LABEL="newcoin-env"
@@ -146,37 +146,37 @@ generate_genesis_block()
         docker_run_genesis "python /GenesisH0/genesis.py -a scrypt -z \"$PHRASE\" -p $GENESIS_REWARD_PUBKEY 2>&1 | tee /GenesisH0/${COIN_NAME}-main.txt"
     else
         echo "Genesis block already mined.."
-        cat ${COIN_NAME}-main.txt
+        cat ${StarBase}-main.txt
     fi
 
-    if [ ! -f ${COIN_NAME}-test.txt ]; then
+    if [ ! -f ${StarBase}-test.txt ]; then
         echo "Mining genesis block of test network... this procedure can take many hours of cpu work.."
         docker_run_genesis "python /GenesisH0/genesis.py  -t 1486949366 -a scrypt -z \"$PHRASE\" -p $GENESIS_REWARD_PUBKEY 2>&1 | tee /GenesisH0/${COIN_NAME}-test.txt"
     else
         echo "Genesis block already mined.."
-        cat ${COIN_NAME}-test.txt
+        cat ${StarBase}-test.txt
     fi
 
-    if [ ! -f ${COIN_NAME}-regtest.txt ]; then
+    if [ ! -f ${StarBase}-regtest.txt ]; then
         echo "Mining genesis block of regtest network... this procedure can take many hours of cpu work.."
         docker_run_genesis "python /GenesisH0/genesis.py -t 1296688602 -b 0x207fffff -n 0 -a scrypt -z \"$PHRASE\" -p $GENESIS_REWARD_PUBKEY 2>&1 | tee /GenesisH0/${COIN_NAME}-regtest.txt"
     else
         echo "Genesis block already mined.."
-        cat ${COIN_NAME}-regtest.txt
+        cat ${StarBase}-regtest.txt
     fi
 
-    MAIN_PUB_KEY=$(cat ${COIN_NAME}-main.txt | grep "^pubkey:" | $SED 's/^pubkey: //')
-    MERKLE_HASH=$(cat ${COIN_NAME}-main.txt | grep "^merkle hash:" | $SED 's/^merkle hash: //')
-    TIMESTAMP=$(cat ${COIN_NAME}-main.txt | grep "^time:" | $SED 's/^time: //')
+    MAIN_PUB_KEY=$(cat ${StarBase}-main.txt | grep "^pubkey:" | $SED 's/^pubkey: //')
+    MERKLE_HASH=$(cat ${StarBase}-main.txt | grep "^merkle hash:" | $SED 's/^merkle hash: //')
+    TIMESTAMP=$(cat ${StarBase}-main.txt | grep "^time:" | $SED 's/^time: //')
     BITS=$(cat ${COIN_NAME}-main.txt | grep "^bits:" | $SED 's/^bits: //')
 
-    MAIN_NONCE=$(cat ${COIN_NAME}-main.txt | grep "^nonce:" | $SED 's/^nonce: //')
-    TEST_NONCE=$(cat ${COIN_NAME}-test.txt | grep "^nonce:" | $SED 's/^nonce: //')
-    REGTEST_NONCE=$(cat ${COIN_NAME}-regtest.txt | grep "^nonce:" | $SED 's/^nonce: //')
+    MAIN_NONCE=$(cat ${StarBase}-main.txt | grep "^nonce:" | $SED 's/^nonce: //')
+    TEST_NONCE=$(cat ${StarBase}-test.txt | grep "^nonce:" | $SED 's/^nonce: //')
+    REGTEST_NONCE=$(cat ${StarBase}-regtest.txt | grep "^nonce:" | $SED 's/^nonce: //')
 
-    MAIN_GENESIS_HASH=$(cat ${COIN_NAME}-main.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
-    TEST_GENESIS_HASH=$(cat ${COIN_NAME}-test.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
-    REGTEST_GENESIS_HASH=$(cat ${COIN_NAME}-regtest.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
+    MAIN_GENESIS_HASH=$(cat ${StarBase}-main.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
+    TEST_GENESIS_HASH=$(cat ${StarBase}-test.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
+    REGTEST_GENESIS_HASH=$(cat ${StarBase}-regtest.txt | grep "^genesis hash:" | $SED 's/^genesis hash: //')
 
     popd
 }
